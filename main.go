@@ -51,3 +51,24 @@ func (b *Bonito[T]) AsSeparated(sep string) *Bonito[T] {
 	return b
 }
 
+
+func (b *Bonito[T]) Trunc(prec int) *Bonito[T] {
+	if prec >= len(b.str) {
+		return b
+	}
+
+	if prec+1 > len(b.str) {
+		prec--
+	}
+	b.significand = len(b.str) - prec
+
+	conv, err := strconv.ParseFloat(b.str[0:prec+1], 64)
+	conv = conv / 10
+	b.str = fmt.Sprint(math.Round(conv))
+
+	if err != nil {
+		b.str = b.str[0 : prec+1]
+	}
+
+	return b
+}
