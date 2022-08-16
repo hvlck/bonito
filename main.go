@@ -27,3 +27,27 @@ func Pretty[T Number](number T) *Bonito[T] {
 		str:    fmt.Sprint(number),
 	}
 }
+
+// Separates the string at every three significant places with sep.
+func (b *Bonito[T]) AsSeparated(sep string) *Bonito[T] {
+	if len(b.str) > 3 {
+		leading_places := len(b.str) % 3
+		new := ""
+
+		if leading_places != 0 {
+			new += b.str[0:leading_places] + sep
+		}
+
+		for i := leading_places; i < len(b.str); i += 3 {
+			new += b.str[i : i+3]
+			if i+3 < len(b.str) {
+				new += sep
+			}
+		}
+
+		b.str = new
+	}
+
+	return b
+}
+
